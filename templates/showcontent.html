@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>showcontent</title>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <h2>目前资料</h2>
+            <!-- 这里可以显示当前数据库中的数据 -->
+            <textarea rows="10" cols="40" id="dataDisplay"></textarea>
+        </div>
+        <div class="right">
+            <h2>添加/删除数据</h2>
+            <!-- 输入日期 -->
+            <label for="inputDate">日期：</label>
+            <input type="date" id="inputDate"><br>
+
+            <!-- 输入物品 -->
+            <label for="inputItem">物品：</label>
+            <input type="text" id="inputItem"><br>
+
+            <!-- 输入金钱 -->
+            <label for="inputMoney">金钱：</label>
+            <input type="text" id="inputMoney"><br>
+
+            <!-- 确认新增按钮 -->
+            <button onclick="addData()">确认新增</button><br>
+
+            <!-- 确认删除按钮 -->
+            <button onclick="deleteData()">确认删除</button>
+        </div>
+    </div>
+
+    <!-- JavaScript 代码可以在这里添加，用于处理新增和删除数据的逻辑 -->
+
+</body>
+</html>
