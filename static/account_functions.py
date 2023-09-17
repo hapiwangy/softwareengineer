@@ -1,18 +1,29 @@
+# 這裡負責和帳號有關的資料庫操作
 import sqlite3
 import logging
+# 製造出可以用的sql sentence
+def addingUser()-> None:
+    informations = [
+        ['happy', 'happy123','happy123'],
+        ['tom', 'tom123', 'tom123'],
+        ['happy','kevin123', 'kevin123'],
+        ['tom','sherry123','sherry123']
+    ]
+    for info in informations:
+        print(f'''INSERT INTO users VALUES('{info[0]}', '{info[1]}', '{info[2]}')''')
 # 建置資料庫
-def databaseinitial()-> None:
+def dbaccountinitial()-> None:
     logging.debug("database initializing")
     con = sqlite3.connect('./static/data.db')
     cur = con.cursor()
     # 創建一個table用來存放使用者資料
     cur.execute('''
-        CREATE TABLE IF NOT EXISTS users (
+            CREATE TABLE IF NOT EXISTS users (
             groupname TEXT,
             username TEXT,
             password TEXT
         )
-    ''')
+        ''')
     con.commit()
     con.close()
     logging.debug("database initialize successful")
@@ -51,4 +62,4 @@ def logincheck(groupname:str, username: str, password:str)-> bool:
     else:
         con.close()
         return True
-    
+
