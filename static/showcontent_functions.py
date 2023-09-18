@@ -51,6 +51,3 @@ def addthing(date:str, thing:str, expense:str, member:str, groupname:str)->bool:
         return True
     except:
         return False
-
-if __name__ == '__main__':
-    print(addthing('asd','asd','asd','asd','asd'))

@@ -21,14 +21,15 @@ def dbaccountinitial()-> None:
             CREATE TABLE IF NOT EXISTS users (
             groupname TEXT,
             username TEXT,
-            password TEXT
+            password TEXT,
+            admin INTEGER
         )
         ''')
     con.commit()
     con.close()
     logging.debug("database initialize successful")
 # 增加資料
-def add_account(groupname: str, username: str, password: str):
+def add_account(groupname: str, username: str, password: str, isAdmin: int):
     con = sqlite3.connect("./static/data.db")
     cur = con.cursor()
     # 尋找和現在group相同的所有username
@@ -38,7 +39,7 @@ def add_account(groupname: str, username: str, password: str):
         con.close()
         return False
     cur.execute(f'''
-        INSERT INTO users VALUES ('{groupname}', '{username}', '{password}')
+        INSERT INTO users VALUES ('{groupname}', '{username}', '{password}', {isAdmin})
     ''')
     con.commit()
     con.close()
@@ -47,19 +48,39 @@ def add_account(groupname: str, username: str, password: str):
 def fixfetch(beingfetch:list[tuple])-> list[str]:
     return [x[0]for x in beingfetch]
 # 確認是否登入成功
-def logincheck(groupname:str, username: str, password:str)-> bool:
+def logincheck(groupname:str, username: str, password:str)-> (bool, bool):
+    # 回傳(登入成功, 是否是admin)
     con = sqlite3.connect("./static/data.db")
     cur = con.cursor()
-    specificaccount = cur.execute(f"SELECT password FROM users WHERE groupname='{groupname}' AND username='{username}' ")
+    specificaccount = cur.execute(f"SELECT password, admin FROM users WHERE groupname='{groupname}' AND username='{username}' ")
     specificaccount = list(specificaccount.fetchall())
     if not specificaccount:
         con.close()
-        return False
-    specificaccount = specificaccount[0]
-    if  password != specificaccount[0]:
+        return False, False
+    if  password != specificaccount[0][0]:
         con.close()
-        return False
+        return False, False
     else:
         con.close()
-        return True
+        return True, bool(specificaccount[0][1])
+
+# 確認group的是否存在
+def check_group_exist(groupname: str)->bool:
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    det = cur.execute(f'''
+        SELECT groupname from users
+    ''')
+    det = [x[0] for x in list(det.fetchall())]
+    con.close()
+    return groupname in det
+# 獲得所有的group
+def get_all_group()-> list[str]:
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    det = cur.execute(f'''
+        SELECT groupname from users
+    ''')
+    det = [x[0] for x in list(det.fetchall())]
+    return list(set(det))
 

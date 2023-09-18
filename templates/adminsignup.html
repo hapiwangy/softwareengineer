@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Login Page</title>
 </head>
-
 <body style="background-color: slategrey">
 
-    <div class="container">
+    <div class="container" >
         {% if show%}
         <div class="alert alert-success mt-3 align-items-center justify-content-center">
             <div>
@@ -22,30 +20,24 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h1 class="text-center">SignUp</h1>
+                        <h1 class="text-center">AdminSignUp</h1>
                     </div>
                     <div class="card-body">
                         <form method="POST">
                             <div class="form-group">
                                 <label for="groupname">所屬組織：</label>
-                                <select name='groupname'>
-                                    {% for group in groups%}
-                                    <option value="{{ group }}"> {{ group }}</option>
-                                    {% endfor %}
-                                </select>
+                                <input type="text" id="groupname" name="groupname" class="form-control" pattern="[a-zA-Z]+">
                             </div>
                             <div class="form-group">
                                 <label for="username">帳號：</label>
-                                <input type="text" id="username" name="username" class="form-control"
-                                    pattern="[a-zA-Z0-9]+">
+                                <input type="text" id="username" name="username" class="form-control" pattern="[a-zA-Z0-9]+">
                             </div>
                             <div class="form-group">
                                 <label for="password">密碼：</label>
                                 <input type="password" id="password" name="password" class="form-control">
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">建立帳號</button>
-                            <button type="button" class="btn btn-secondary btn-block"
-                                onclick="redirectToLogin()">回到登入</button>
+                            <button type="button" class="btn btn-secondary btn-block" onclick="redirectToLogin()">回到登入</button>
                         </form>
                     </div>
                 </div>
@@ -63,5 +55,4 @@
         }
     </script>
 </body>
-
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,78 +10,96 @@
         body {
             background-color: azure;
         }
-        .top-part{
-            margin-top: 30px;
+
+        .very-top {
+            margin: 1%;
         }
     </style>
 </head>
+
 <body>
-    {% if show%}    
-    <div class="alert alert-success mt-3 align-items-center justify-content-center">
-        <div>
-            <strong>{{ show }}</strong>
+    <div class="very-top">
+        {% if not isAdmin%}
+        <div class="container-fluid text-center font-weight-bold  border border-secondary">
+            <h1>Hi {{ username }} from {{ groupname }} !</h1>
         </div>
+        {% else %}
+        <div class="container-fluid text-center font-weight-bold  border border-secondary">
+            <h1>Hi {{ username }}, Admin from {{ groupname }} !</h1>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-    <div class="top-part container">
-        <form method="POST">
-            <input type="hidden" name="groupname" value="{{ groupname }}">
-            <input type="hidden" name="username" value="{{ username }}">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group text-center">
-                        <label for="date">時間</label>
-                        <input type="date" class="form-control" name="date" id="date">
-                    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="container col-md-5 border border-secondary">
+
+            </div>
+            <div class="col-md-1"></div>
+            <div class="container col-md-4 border border-secondary">
+                <div class="top-part container">
+                    <form method="POST">
+                        <input type="hidden" name="groupname" value="{{ groupname }}">
+                        <input type="hidden" name="username" value="{{ username }}">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group text-center">
+                                    <label for="date">時間</label>
+                                    <input type="date" class="form-control" name="date" id="date">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group text-center">
+                                    <label for="text1">品項</label>
+                                    <input type="text" class="form-control" name="thing" id="thing">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group text-center">
+                                    <label for="text2">金額</label>
+                                    <input type="text" class="form-control" name="expense" id="expense">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary btn-block">提交</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group text-center">
-                        <label for="text1">品項</label>
-                        <input type="text" class="form-control" name="thing" id="thing">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group text-center">
-                        <label for="text2">金額</label>
-                        <input type="text" class="form-control" name="expense" id="expense">
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>&nbsp;</label>
-                        <button type="submit" class="btn btn-primary btn-block">確認提交</button>
-                    </div>
+                <div class="bottom-part container">
+                    <table class="table table-primary table-bordered">
+                        <thead>
+                            <tr>
+                                <td>日期</td>
+                                <td>品項</td>
+                                <td>金額</td>
+                                <td>人員</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if dbdata %}
+                            {% for data in dbdata%}
+                            <tr>
+                                <td>{{ data[0] }}</td>
+                                <td>{{ data[1] }}</td>
+                                <td>{{ data[2] }}</td>
+                                <td>{{ data[3] }}</td>
+                            </tr>
+                            {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </form>
+            <div class="col-md-1"></div>
+        </div>
     </div>
-    <div class="bottom-part container">
-        <table class="table table-primary table-bordered">
-            <thead>
-                <tr>
-                    <td>日期</td>
-                    <td>品項</td>
-                    <td>金額</td>
-                    <td>人員</td>
-                </tr>
-            </thead>
-            <tbody>
-                {% if dbdata %}
-                    {% for data in dbdata%}
-                    <tr>
-                        <td>{{ data[0] }}</td>
-                        <td>{{ data[1] }}</td>
-                        <td>{{ data[2] }}</td>
-                        <td>{{ data[3] }}</td>
-                    </tr>
-                    {% endfor %}
-                {% endif %}
-            </tbody>
-        </table>
-    </div>
-    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
