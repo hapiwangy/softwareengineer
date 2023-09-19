@@ -3,7 +3,7 @@ import logging
 # 這裡處理和記帳有關的資料庫操作
 # 初始化需要用到的table
 def dbshowinitial()->None:
-    logging.debug("initial showconten table")
+    logging.debug("initial showcontent table")
     con = sqlite3.connect('./static/data.db')
     cur = con.cursor()
     cur.execute('''
@@ -12,11 +12,59 @@ def dbshowinitial()->None:
             thing TEXT,
             expense TEXT,
             member TEXT,
-            groupname TEXT
+            groupname TEXT,
+            isDanger INTEGER
         )''')
     con.commit()
     con.close()
     logging.debug("initial Successful")
+# 初始化post介面
+def dbpostinitial()->None:
+    logging.debug("initial postcontent table")
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    cur.execute('''
+            CREATE TABLE IF NOT EXISTS posts (
+            groupname TEXT,
+            username TEXT,
+            postcontent TEXT
+        )''')
+    con.commit()
+    con.close()
+    logging.debug("initial Successful")
+# 增加一個post
+def addpost(groupname:str, username:str, postcontent:str)->None:
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    cur.execute(f'''
+                INSERT INTO posts (groupname, username, postcontent)
+                VALUES ('{groupname}', '{username}', '{postcontent}')
+                ''')
+    con.commit()
+    con.close()
+# 獲得目前所有的posts
+def getposts()-> list[dict]:
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    values = cur.execute(f'''
+                SELECT * from posts
+                         ''')
+    values = values.fetchall()
+    con.close()
+    return values   
+# 刪除某個post
+def deleteposts(groupname:str, username:str, postcontent:str):
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    cur.execute(f'''
+        DELETE FROM posts
+        WHERE groupname='{groupname}' AND username='{username}' AND postcontent='{postcontent}'
+    ''')
+    con.commit()
+    con.close()  
+
+
+
 # 製造出可以用的句子
 def addingdata()->None:
     informations = [
@@ -26,7 +74,7 @@ def addingdata()->None:
         [ '2023/10/07', 'clubs','1000','sherry123','tom']
     ]
     for info in informations:
-        print(f'''INSERT INTO Accounting VALUES('{info[0]}','{info[1]}','{info[2]}','{info[3]}','{info[4]}')''')
+        print(f'''INSERT INTO Accounting VALUES('{info[0]}','{info[1]}','{info[2]}','{info[3]}','{info[4]}',0)''')
 
 # 取得某個組織的所有資料
 def getgroupdata(groupname: str)->list:
@@ -44,10 +92,34 @@ def addthing(date:str, thing:str, expense:str, member:str, groupname:str)->bool:
         con = sqlite3.connect('./static/data.db')
         cur = con.cursor()
         cur.execute(f'''
-                    INSERT INTO Accounting VALUES(?, ?, ?, ?, ?)
-                    ''', (date, thing, expense, member, groupname))
+                    INSERT INTO Accounting 
+                    (date, thing, expense, member, groupname, isDanger)            
+                    VALUES(?, ?, ?, ?, ?, ?)
+                    ''', (date, thing, expense, member, groupname, 0))
         con.commit()
         con.close()
         return True
     except:
         return False
+# 更新某個東西的狀態
+def updatestatus(form_data:list)-> None:
+    new_state = not int(form_data[4])
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    cur.execute(f'''
+        UPDATE Accounting
+        SET isDanger = {new_state}
+        WHERE date='{form_data[0]}' AND thing='{form_data[1]}' AND expense='{form_data[2]}' AND member='{form_data[3]}'
+    ''')
+    con.commit()
+    con.close()
+# 刪除某個項目
+def deleteitem(form_data:list)->None:
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    cur.execute(f'''
+        DELETE FROM Accounting
+        WHERE date='{form_data[0]}' AND thing='{form_data[1]}' AND expense='{form_data[2]}' AND member='{form_data[3]}' AND groupname='{form_data[5]}'
+    ''')
+    con.commit()
+    con.close()

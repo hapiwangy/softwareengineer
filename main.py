@@ -14,7 +14,7 @@ app = Flask(__name__)
 # login page
 @app.route('/', methods=['GET', "POST"])
 def home():
-    groups = ssf.get_all_group()
+    groups = saf.get_all_group()
     if request.method == 'POST':
         from_data = request.form
         # 確認是否有登入成功
@@ -26,13 +26,13 @@ def home():
             # 如果登入成功的話要先去資料庫拿該組織的記帳資料，然後傳給。
             return redirect(url_for('showcontent', username=username, groupname=groupname, isAdmin = isAdmin))
         else:
-            return render_template('login.html', show='Login Fail', groups= groups)
+            return render_template('login.html', show='Login Fail', groups=groups)
     return render_template('login.html', groups = groups)
 
 # sign up page
 @app.route('/signup', methods=['GET','POST'])
 def signup():
-    groups = ssf.get_all_group()
+    groups = saf.get_all_group()
     if request.method == 'POST':
         form_data = request.form
         groupname = form_data.get('groupname')
@@ -43,20 +43,51 @@ def signup():
         if check:
             return render_template('signup.html', show='Successful', groups=groups)
         else:
-            return render_template('signup.html', show="Fail",groups=groups)
-    return render_template('signup.html',groups=groups)
+            return render_template('signup.html', show="Fail", groups=groups)
+    return render_template('signup.html', groups=groups)
 
 # show accounting table
 @app.route('/showcontent/<username>/<groupname>/<int:isAdmin>', methods=['GET','POST'])
 def showcontent(username, groupname, isAdmin):
     dbdata = ssf.getgroupdata(groupname)
+    posts = ssf.getposts()
     if request.method == "POST":
-        form_data = request.form
-        check = ssf.addthing(form_data['date'], form_data['thing'], form_data['expense'], form_data['username'], form_data['groupname'])
-        dbdata = ssf.getgroupdata(groupname)
-        if check:
-            return render_template('showcontent.html', username=form_data['username'], groupname=form_data['groupname'], dbdata=dbdata, isAdmin=isAdmin)
-    return render_template('showcontent.html', username=username, groupname=groupname, dbdata=dbdata, isAdmin = isAdmin)
+        if 'addthing' in request.form:
+            form_data = request.form
+            check = ssf.addthing(form_data['date'], form_data['thing'], form_data['expense'], form_data['username'], form_data['groupname'])
+            dbdata = ssf.getgroupdata(groupname)
+            if check:
+                return render_template('showcontent.html', username=form_data['username'], groupname=form_data['groupname'], dbdata=dbdata, isAdmin=isAdmin, posts=posts)
+        elif 'switchbutton' in request.form:
+            form_data = request.form
+            # 更新狀態
+            form_data = [x for x in form_data]
+            ssf.updatestatus(form_data)
+            dbdata = ssf.getgroupdata(groupname)
+            return render_template('showcontent.html', username=username, groupname=groupname, dbdata=dbdata, isAdmin = isAdmin, posts=posts) 
+        elif 'deletebutton' in request.form:
+            form_data = request.form
+            # 更新狀態
+            form_data = [x for x in form_data]
+            ssf.deleteitem(form_data)
+            dbdata = ssf.getgroupdata(groupname)
+            return render_template('showcontent.html', username=username, groupname=groupname, dbdata=dbdata, isAdmin = isAdmin, posts=posts) 
+        elif 'addpost' in request.form:
+            form_data = request.form
+            ssf.addpost(form_data['groupname'], form_data['username'] ,form_data['postcontent'])
+            # 獲得更新後的posts
+            posts = ssf.getposts()
+            return render_template('showcontent.html', username=username, groupname=groupname, dbdata=dbdata, isAdmin = isAdmin, posts=posts)
+        elif 'deletepost' in request.form:
+            form_data = request.form
+            ssf.deleteposts(form_data['groupname'], form_data['username'] ,form_data['postcontent'])
+            posts = ssf.getposts()
+            return render_template('showcontent.html', username=username, groupname=groupname, dbdata=dbdata, isAdmin = isAdmin, posts=posts)
+        
+        elif 'logout' in request.form:
+            return redirect(url_for('home'))
+        
+    return render_template('showcontent.html', username=username, groupname=groupname, dbdata=dbdata, isAdmin = isAdmin, posts=posts)
 
 # adding new admin (one group one admin)
 @app.route('/admin', methods=['POST', 'GET'])

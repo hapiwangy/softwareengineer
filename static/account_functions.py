@@ -39,7 +39,7 @@ def add_account(groupname: str, username: str, password: str, isAdmin: int):
         con.close()
         return False
     cur.execute(f'''
-        INSERT INTO users VALUES ('{groupname}', '{username}', '{password}', {isAdmin})
+        INSERT INTO users (groupname, username, password, admin) VALUES ('{groupname}', '{username}', '{password}', {isAdmin})
     ''')
     con.commit()
     con.close()
