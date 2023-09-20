@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>帖子和留言板</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgba(175, 222, 191, 0.75);
+        }
+
+        .post-outer-box {
+            width: 600px;
+            height: 750px;
+            padding: 20px;
+            margin-left: 10%;
+            margin-top: 5%;
+            border: 3px solid #000000;
+            background-color: #c0ecec;
+            float: left;
+            overflow-y: auto;
+        }
+
+        .comments-outer-box {
+            width: 600px;
+            height: 750px;
+            margin-right: 10%;
+            background-color: rgb(230, 195, 180);
+            margin-top: 5%;
+            border: 3px solid #000000;
+            float: right;
+            overflow-y: auto;
+        }
+
+        .comment-section {
+            margin-top: 20px;
+            margin-left: 5px;
+        }
+
+        .card {
+            margin-top: 20px;
+            margin-left: 5px;
+        }
+
+        .card-header {
+            background-color: #4759d5e6;
+            border: 1px solid #000000;
+        }
+
+        .card-body {
+            background-color: #a8dbef;
+            border: 1px solid #000000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="post-outer-box">
+        <form method="POST">
+            <input type="hidden" name="groupname" value="{{ cgroupname }}">
+            <input type="hidden" name="username" value="{{ cusername }}">
+            <input type="hidden" name="isAdmin" value="{{ isAdmin }}">
+            <button class="btn btn-danger" name="backtoall">back to all post</button>
+        </form>
+        <div class="card border-info mb-3" style="max-width: 36rem;">
+            <div class="card-header">{{ username }} from {{ groupname }} </div>
+            <div class="card-body text-info">
+                <p class="card-text">{{ postcontent }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="comments-outer-box">
+
+        {% for comment in all_comments%}
+        <div class="card bg-light mb-3" style="max-width: 36rem;">
+            <div class="card-header">{{comment[2]}} from {{comment[1]}} </div>
+            <div class="card-body">
+                <p class="card-text">{{comment[3]}}</p>
+                {% if isAdmin %}
+                <form method="POST">
+                    <input type="hidden" name="postcontent" value="{{comment[0]}}">
+                    <input type="hidden" name="groupname" value="{{comment[1]}}">
+                    <input type="hidden" name="username" value="{{comment[2]}}">
+                    <input type="hidden" name="comment" value="{{comment[3]}}">
+                    <button name="deletecomment">del</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        <!-- 新留言輸入框和按鈕 -->
+        <div class="comment-section">
+            <form method="POST">
+                <input type="hidden" name="cgroupname" value="{{ cgroupname }}">
+                <input type="hidden" name="cusername" value="{{ cusername }}">
+                <input type="text" id="new-comment" name="newcomment" placeholder="輸入留言">
+                <button class="btn btn-primary" name="addnewcomment">新增留言</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

@@ -18,7 +18,51 @@ def dbshowinitial()->None:
     con.commit()
     con.close()
     logging.debug("initial Successful")
-# 初始化post介面
+# 初始化comment table
+def dbcommentitial()->None:
+    logging.debug('initial comment table')
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS comments (
+        postcontent TEXT,
+        groupname TEXT,
+        username TEXT,
+        comment TEXT        
+        )''')
+    con.commit()
+    con.close()
+# 獲得所有的comment
+def getallcomment(postcontent: str)-> list[tuple]:
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    data = cur.execute(f'''
+        SELECT * FROM comments WHERE postcontent='{postcontent}' 
+    ''')
+    data = data.fetchall()
+    con.close()
+    return data
+# 新增一個comment
+def addnewcomment(postcontent: str, groupname: str, username: str, comment: str)-> None:
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    cur.execute(f'''
+       INSERT INTO comments VALUES('{postcontent}', '{groupname}', '{username}','{comment}')         
+    ''')
+    con.commit()
+    con.close()
+
+# 刪除掉一個comment
+def deletecomment(postcontent: str, groupname: str, username: str, comment: str)-> None:
+    con = sqlite3.connect('./static/data.db')
+    cur = con.cursor()
+    cur.execute(f'''
+        DELETE FROM comments
+        WHERE groupname='{groupname}' AND username='{username}' AND postcontent='{postcontent}' AND comment='{comment}'       
+    ''')
+    con.commit()
+    con.close()
+# 初始化post table
 def dbpostinitial()->None:
     logging.debug("initial postcontent table")
     con = sqlite3.connect('./static/data.db')

@@ -83,7 +83,10 @@ def showcontent(username, groupname, isAdmin):
             ssf.deleteposts(form_data['groupname'], form_data['username'] ,form_data['postcontent'])
             posts = ssf.getposts()
             return render_template('showcontent.html', username=username, groupname=groupname, dbdata=dbdata, isAdmin = isAdmin, posts=posts)
-        
+        elif 'showfullpost' in request.form:
+            form_data = request.form
+            print(form_data)
+            return redirect(url_for('showallpost', groupname=form_data['groupname'], username=form_data['username'] ,postcontent=form_data['postcontent'],cgroupname=form_data['cgroupname'],cusername=form_data['cusername'], isAdmin=isAdmin))
         elif 'logout' in request.form:
             return redirect(url_for('home'))
         
@@ -105,5 +108,27 @@ def admin():
         else:
             return render_template('adminsignup.html', show="Fail")
     return render_template('adminsignup.html')
+
+# open comment page
+@app.route('/showallpost/<groupname>/<username>/<postcontent>/<cgroupname>/<cusername>/<int:isAdmin>', methods=['GET','POST'])
+def showallpost(groupname: str, username: str, postcontent: str, cgroupname: str, cusername: str, isAdmin: int):
+    # 取得當前貼文相關的所有留言
+    all_comments = ssf.getallcomment(postcontent)
+    if request.method == 'POST':
+        if 'addnewcomment' in request.form:
+            form_data = request.form
+            ssf.addnewcomment(postcontent, cgroupname, cusername, form_data['newcomment'])    
+            all_comments = ssf.getallcomment(postcontent)
+            return render_template('PostnComment.html',groupname=groupname, username=username, postcontent=postcontent, cgroupname=cgroupname, cusername=cusername, all_comments=all_comments, isAdmin=isAdmin)
+        elif 'deletecomment' in request.form:
+            form_data = request.form
+            ssf.deletecomment(form_data['postcontent'], form_data['groupname'],form_data['username'],form_data['comment'])
+            all_comments = ssf.getallcomment(postcontent)
+            return render_template('PostnComment.html',groupname=groupname, username=username, postcontent=postcontent, cgroupname=cgroupname, cusername=cusername, all_comments=all_comments, isAdmin=isAdmin)
+        elif 'backtoall' in request.form:
+            form_data = request.form
+            return redirect(url_for('showcontent', groupname=groupname, username=username, isAdmin=isAdmin))
+    return render_template('PostnComment.html',groupname=groupname, username=username, postcontent=postcontent, cgroupname=cgroupname, cusername=cusername, all_comments=all_comments, isAdmin=isAdmin)
+
 if __name__ == '__main__':
     app.run(debug=True)
