@@ -26,7 +26,7 @@ if __name__ == '__main__':
     cur.execute("INSERT INTO Accounting (date, thing, expense, member, groupname, isDanger) VALUES('2023-09-07','spade','1000','kevin123','happy',0)")
     cur.execute("INSERT INTO Accounting (date, thing, expense, member, groupname, isDanger) VALUES('2023-10-07','clubs','1000','sherry123','tom',0)")
     cur.execute("INSERT INTO posts (groupname, username, postcontent) VALUES ('happy', 'happy123', 'today is a good day to die owo')")
-    cur.execute("INSERT INTO posts (groupname, username, postcontent) VALUES ('happy', 'happy123', 'Xaxxyis so cute that my eyes can not get away from her')")
+    cur.execute("INSERT INTO posts (groupname, username, postcontent) VALUES ('happy', 'happy123', 'from today i am a broken dog woo, woo.')")
     cur.execute("INSERT INTO posts (groupname, username, postcontent) VALUES ('tom', 'tom123', 'today is a good day to die dddddd owo')")
     cur.execute("INSERT INTO comments (postcontent, groupname, username, comment) VALUES ('today is a good day to die owo', 'happy', 'kevin123', 'cool bro')")
     cur.execute("INSERT INTO comments (postcontent, groupname, username, comment) VALUES ('today is a good day to die owo', 'tom', 'tom123', 'lol')")
