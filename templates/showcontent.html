@@ -57,6 +57,13 @@
             <div class="container col-md-4 border border-secondary">
                 <div class="container"
                     style="min-height: 80vh; display: flex; flex-direction: column; justify-content: space-between; ">
+                    {% if state == "Fail"%}
+                    <div class="alert alert-danger mt-3 align-items-center justify-content-center">
+                        <div>
+                            <strong>your are not the admin of this post.</strong>
+                        </div>
+                    </div>
+                    {% endif %}
                     <div class="tp-part text-center border border-secondary">
                         {% for post in posts%}
                         <div class="card">
