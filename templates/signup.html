@@ -11,7 +11,13 @@
 <body style="background-color: slategrey">
 
     <div class="container">
-        {% if show%}
+        {% if show == "Fail"%}
+        <div class="alert alert-danger mt-3 align-items-center justify-content-center">
+            <div>
+                <strong>{{ show }}</strong>
+            </div>
+        </div>
+        {% elif show == "Successful" %}
         <div class="alert alert-success mt-3 align-items-center justify-content-center">
             <div>
                 <strong>{{ show }}</strong>
