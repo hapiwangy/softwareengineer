@@ -40,6 +40,8 @@ def signup():
         groupname = form_data.get('groupname')
         username = form_data.get('username')
         password = form_data.get('password')
+        if not username or not password:
+            return render_template('signup.html', show="Fail", groups=groups)
         # 設定一個變數紀錄是不是創建成功
         check = saf.add_account(groupname, username, password, 0)
         if check:
