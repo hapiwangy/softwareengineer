@@ -21,6 +21,8 @@ def home():
         groupname = from_data.get('groupname')
         username = from_data.get('username')
         password = from_data.get('password')
+        if not username or not password:
+            return render_template('login.html', show='Login Fail', groups=groups)
         check, isAdmin = saf.logincheck(groupname, username, password)
         if check:
             # 如果登入成功的話要先去資料庫拿該組織的記帳資料，然後傳給。

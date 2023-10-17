@@ -10,13 +10,13 @@
 
     <div class="container" >
         {% if show == "Fail"%}
-        <div id="showSuccessful" class="alert alert-danger mt-3 align-items-center justify-content-center">
+        <div id="showFail" class="alert alert-danger mt-3 align-items-center justify-content-center">
             <div>
                 <strong>{{ show }}</strong>
             </div>
         </div>
         {% elif show == "Successful" %}
-        <div id="showFail" class="alert alert-success mt-3 align-items-center justify-content-center">
+        <div id="showSuccessful" class="alert alert-success mt-3 align-items-center justify-content-center">
             <div>
                 <strong>{{ show }}</strong>
             </div>
