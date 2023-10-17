@@ -103,6 +103,9 @@ def admin():
         groupname = form_data.get('groupname')
         username = form_data.get('username')
         password = form_data.get('password')
+        # 確定任一欄位不可以為空
+        if not username or not password:
+            return render_template('adminsignup.html', show="Fail")
         # 確定這個組織有沒有存在(是否已經有admin了)
         check_is_used = saf.check_group_exist(groupname)
         if not check_is_used:
