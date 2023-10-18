@@ -3,12 +3,9 @@ import static.account_functions as saf
 import static.showcontent_functions as ssf
 import os
 import logging
-logging.basicConfig(level=logging.DEBUG)
 
 # 如果之後沒有要default data的話要把下面兩行反註解
 # 測試時透過python ./static/dbinit.py來做初始化
-# saf.dbaccountinitial()
-# ssf.dbshowinitial()
 
 app = Flask(__name__)
 # login page
@@ -144,4 +141,8 @@ def showallpost(groupname: str, username: str, postcontent: str, cgroupname: str
     return render_template('PostnComment.html',groupname=groupname, username=username, postcontent=postcontent, cgroupname=cgroupname, cusername=cusername, all_comments=all_comments, isAdmin=isAdmin)
 
 if __name__ == '__main__':
+    saf.dbaccountinitial()
+    ssf.dbshowinitial()
+    ssf.dbpostinitial()
+    ssf.dbcommentitial()
     app.run(debug=True)

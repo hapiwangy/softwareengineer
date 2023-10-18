@@ -77,14 +77,15 @@
                                 <input type="hidden" name="cusername" value="{{username}}">
                                 <button class="card-text btn btn-info" name="showfullpost"> {{ post[2] }}</button>
                                 </form>
-                            {% if isAdmin %}
+                            {% if isAdmin and groupname == post[0] %}
                                 <form method="POST">
                                     <input type="hidden" name="groupname" value="{{post[0]}}">
                                     <input type="hidden" name="username" value="{{ post[1]}}">
                                     <input type="hidden" name="postcontent" value="{{post[2]}}">
                                     <button class="btn btn-danger" name="deletepost">delete</button>
                                 </form>
-                                {% endif %}
+                            {% endif %}
+
                             </div>
                         </div>
                         {% endfor %}

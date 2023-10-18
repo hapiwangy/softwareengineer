@@ -79,7 +79,7 @@
             <div class="card-header">{{comment[2]}} from {{comment[1]}} </div>
             <div class="card-body">
                 <p class="card-text">{{comment[3]}}</p>
-                {% if isAdmin %}
+                {% if isAdmin and comment[1] == groupname %}
                 <form method="POST">
                     <input type="hidden" name="postcontent" value="{{comment[0]}}">
                     <input type="hidden" name="groupname" value="{{comment[1]}}">
